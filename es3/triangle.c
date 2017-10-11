@@ -42,42 +42,14 @@ triangle_init(ESContext *ctx)
     "out vec4 fragColor;                          \n"
     "void main()                                  \n"
     "{                                            \n"
-    "   fragColor = vec4(1.0, 0.0, 0.0, 1.0);  \n"
+    "   fragColor = vec4(1.0, 0.0, 0.0, 1.0);     \n"
     "}                                            \n";
 
-    GLuint vertexShader;
-    GLuint fragmentShader;
-    GLuint programObject;
-    GLint linked;
-    
-    // Load the vertex/fragment shaders
-    vertexShader = triangle_load_shader(GL_VERTEX_SHADER, vShaderStr);
-    fragmentShader = triangle_load_shader(GL_FRAGMENT_SHADER, fShaderStr);
-    
     // Create the program object
-    programObject = glCreateProgram();
+    GLuint programObject = es_load_program(vShaderStr, fShaderStr);
     if(programObject == 0) {
-        return 0;
-    }
-    glAttachShader(programObject, vertexShader);
-    glAttachShader(programObject, fragmentShader);
-    // Link the program
-    glLinkProgram(programObject);
-    // Check the link status
-    glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
-    if(!linked) {
-        GLint infoLen = 0;
-        glGetProgramiv(programObject, GL_INFO_LOG_LENGTH, &infoLen);
-        if(infoLen > 1) {
-            char* infoLog = malloc(sizeof(char) * infoLen);
-            glGetProgramInfoLog(programObject, infoLen, NULL, infoLog);
-            es_log_message("Error linking program:\n%s\n", infoLog);
-            free(infoLog);
-        }
-        glDeleteProgram(programObject);
         return GL_FALSE;
     }
-    
     // Store the program object
     userData->programObject = programObject;
     

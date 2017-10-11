@@ -241,9 +241,13 @@ void ESUTIL_API es_rotate(ESMatrix *result, GLfloat angle, GLfloat x, GLfloat y,
  */
 void ESUTIL_API es_frustum(ESMatrix *result, float left, float right, float bottom, float top, float nearz, float farz);
 /**
- 用一个透视图矩阵来指定乘法矩阵，并返回新的矩阵
+ 用一个透视图矩阵来指定乘法矩阵，并返回新的矩阵 (透视投影（perspective projection）)
  Multiply matrix specified by result with a perspective matrix and return new matrix in result
-
+ 透视投影。相比之下，透视投影比正交投影复杂一些。在这种投影中，越远离摄像机的物体，它在投影后看起来越小。
+ 更进一步来说，平行线将在地平线处会聚。透视投影的变换其实就是模拟人类感知物体的方式。
+ 
+ 正交投影和透视投影都可以通过4 x 4的矩阵来实现，在任何一种变换之后，都可以认为模型位于归一化处理之后的设备坐标系中.
+ 
  @param result Specifies the input matrix.  new matrix is returned in result.
  @param fovy Field of view y angle in degrees 视窗的角度
  @param aspect Aspect ratio of screen 屏幕的长宽比
@@ -253,9 +257,10 @@ void ESUTIL_API es_frustum(ESMatrix *result, float left, float right, float bott
 void ESUTIL_API es_perspective(ESMatrix *result, float fovy, float aspect, float nearz, float farz);
 
 /**
- 用一个透视图矩阵来指定乘法矩阵，并返回新的矩阵
+ 用一个透视图矩阵来指定乘法矩阵，并返回新的矩阵 （正交投影（orthographic projection，或称parallel projection））
  Multiply matrix specified by result with a perspective matrix and return new matrix in result
-
+  正交投影。正交投影的可视体通常是一个矩形，正交投影可以把这个视体变换为单位立方体。
+  正交投影的主要特性是平行线在变换之后彼此之间仍然保持平行，这种变换是平移与缩放的组合。
  @param result result Specifies the input matrix.  new matrix is returned in result
  @param left right Coordinates for the left and right vertical clipping planes
  @param bottom top Coordinates for the bottom and top horizontal clipping planes
